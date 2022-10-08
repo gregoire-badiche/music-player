@@ -33,7 +33,7 @@ const decryptChunk = (chunk, blowFishKey) => {
  * @param source Downloaded song from `getTrackDownloadUrl`
  * @param trackId Song ID as string
  */
-const decryptDownload = (source, trackId) => {
+const decrypt = (source, trackId) => {
     // let part_size = 0x1800;
     let chunk_size = 2048;
     let blowFishKey = getBlowfishKey(trackId);
@@ -62,3 +62,5 @@ const decryptDownload = (source, trackId) => {
 
     return destBuffer;
 };
+
+module.exports = decrypt;
