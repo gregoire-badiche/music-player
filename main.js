@@ -37,7 +37,6 @@ class Window {
     }
 
     emit(channel, message) {
-        console.log(channel, message);
         this.window.webContents.send(channel, message);
     }
 
@@ -59,7 +58,6 @@ const win =  new Window(app);
 const conn = new DeezerConnection();
 
 conn.auth().then(d => {
-    console.log(d.credentials);
     ipcMain.handle('deezer:suggest', async (event, text) => {
         const res = await d.suggest(text);
         return res;
@@ -69,12 +67,10 @@ conn.auth().then(d => {
         return res;
     });
     ipcMain.handle('deezer:track', async (event, trackID, trackToken) => {
-        console.log(trackID, trackToken);
         return await d.track(trackID, trackToken);
     });
     win.whenReady().then(() => {
         win.emit('deezer:authentificated', '');
-        console.log(Date.now(), 'emitted')
     })
 })
 
