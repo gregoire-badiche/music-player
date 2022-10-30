@@ -3,7 +3,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
-const DeezerConnection = require('./utils/requests')
+const DeezerConnection = require('./deezer/requests')
 
 class Window {
     constructor(app) {
@@ -61,14 +61,20 @@ const conn = new DeezerConnection();
 conn.auth().then(d => {
     console.log(d.credentials);
     ipcMain.handle('deezer:suggest', async (event, text) => {
-        console.log(text);
         const res = await d.suggest(text);
-        console.log(res);
         return res;
+    });
+    ipcMain.handle('deezer:query', async (event, text) => {
+        const res = await d.query(text);
+        return res;
+    });
+    ipcMain.handle('deezer:track', async (event, trackID, trackToken) => {
+        console.log(trackID, trackToken);
+        return await d.track(trackID, trackToken);
     });
     win.whenReady().then(() => {
         win.emit('deezer:authentificated', '');
-        console.log('emitted')
+        console.log(Date.now(), 'emitted')
     })
 })
 

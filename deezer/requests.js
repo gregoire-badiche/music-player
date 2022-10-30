@@ -36,6 +36,7 @@ const get = async ({ hostname = 'www.deezer.com', path, cookies = {}, body = '',
                 sum += data;
             })
             res.on('end', () => {
+                console.log('response :', sum);
                 if (parse) sum = JSON.parse(sum);
                 resolve(sum)
             });
