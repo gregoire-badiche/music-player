@@ -3,7 +3,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
-const DeezerConnection = require('./deezer/requests')
+const DeezerConnection = require('./deezer/main')
 
 class Window {
     constructor(app) {

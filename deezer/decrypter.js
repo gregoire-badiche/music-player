@@ -28,11 +28,6 @@ const decryptChunk = (chunk, blowFishKey) => {
     return cipher.update(chunk, "binary", "binary") + cipher.final();
 };
 
-/**
- *
- * @param source Downloaded song from `getTrackDownloadUrl`
- * @param trackId Song ID as string
- */
 const decrypt = (source, trackId) => {
     // let part_size = 0x1800;
     let chunk_size = 2048;
