@@ -1,0 +1,245 @@
+@media screen and (min-width: 860px) {
+    .player-track {
+        width: 100%;
+    }
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+}
+
+body {
+    overflow: hidden;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.bottom {
+    position: relative;
+}
+
+.vertical-bar {
+    border-left: 2px solid #555;
+    box-sizing: border-box;
+    margin: 20px 0;
+    flex-basis: auto;
+}
+
+.player {
+    background-color: #23232d;
+    color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 0 20px;
+    border-radius: 40px;
+    height: 80px;
+}
+
+.player-controls {
+    font-size: 24px;
+    margin: 0 20px;
+}
+
+.player-controls-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.player-controls-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.track-container {
+    height: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.player-controls-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    list-style: none;
+    padding: 0;
+}
+
+.player-controls-group>li {
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.player-controls-group>li:hover {
+    /* animation: shake .3s linear 0s 1 normal both; */
+    transform: rotate(10deg);
+}
+
+@keyframes shake {
+    25% {
+        transform: rotate(10deg);
+    }
+
+    75% {
+        transform: rotate(-10deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.player-track {
+    padding: 20px 40px;
+    flex-shrink: 1;
+    min-width: 0;
+    grid-column: 1/4;
+    grid-row: 1;
+}
+
+.track-seekbar {
+    width: 100%;
+    height: 14px;
+    text-align: center;
+    display: flex;
+}
+
+.timeline-num {
+    font-size: 10px;
+    color: #92929d;
+    padding: 2px 0;
+}
+
+.seekbar {
+    width: 100%;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 12px;
+    appearance: none;
+    --range: calc(var(--max) - var(--min));
+    --ratio: calc((var(--value) - var(--min)) / var(--range));
+    --sx: calc(var(--ratio) * 100%);
+    background-color: #23232d;
+    padding: 0 10px;
+    margin: 0;
+}
+
+.seekbar::-webkit-slider-thumb {
+    visibility: hidden;
+}
+
+.seekbar::-webkit-slider-runnable-track {
+    height: 4px;
+    border: none;
+    border-radius: 2px;
+    box-shadow: none;
+    transition: height .2s, border-radius .2s, background .1s;
+}
+
+.seekbar:hover::-webkit-slider-runnable-track {
+    border-radius: 4px;
+    height: 8px;
+}
+
+.seekbar::-webkit-slider-runnable-track {
+    background: linear-gradient(#F80000, #F80000) 0/var(--sx) 100% no-repeat, #efefef;
+}
+
+.seekbar:hover::-webkit-slider-runnable-track {
+    background: linear-gradient(#F9882F, #F9882F) 0/var(--sx) 100% no-repeat, #efefef;
+}
+
+.seekbar:focus {
+    outline: none;
+}
+
+.track-heading {
+    height: calc(100% - 14px);
+    overflow: hidden;
+    position: relative;
+    white-space: nowrap;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+}
+
+.track-title {
+    margin: auto 0;
+    text-align: center;
+    padding: 4px 0;
+}
+
+.player-icon {
+    width: 30px;
+    height: 30px;
+    position: relative;
+}
+
+.player-icon>img {
+    position: absolute;
+    top: -5px;
+    left: -10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+}
+
+.track-title-grad {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24px;
+    height: 100%;
+    background: linear-gradient(90deg,#00000000,#23232d);
+}
+
+@media screen and not (min-width: 860px) {
+    .player {
+        display: grid;
+        grid-template-columns: 1fr 2px 1fr;
+        grid-template-rows: 1fr 1fr;
+        height: 160px;
+    }
+
+    .player-track {
+        padding-top: 30px;
+        padding-bottom: 10px;
+    }
+
+    .track-seekbar {
+        margin-top: 5px;
+    }
+
+    .vertical-bar {
+        display: none;
+    }
+
+    .vertical-bar-visible {
+        display: initial;
+        grid-row: 2;
+        grid-column: 2;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+
+    .player-controls-group {
+        padding-bottom: 0px;
+        margin-top: 20px;
+    }
+}
+
+.window-drag {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    font-size: 18px;
+    transform: translateY(-45%);
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-app-region: drag;
+}

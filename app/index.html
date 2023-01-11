@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,12 +8,143 @@
     <link rel="stylesheet" href="style.css">
     <title>Greatest Music Player</title>
 </head>
+
 <body>
-    <audio controls src="" id="player"></audio>
-    <input type="text" id="searchBar">
-    <ul id="suggestions"></ul>
-    <ul id="results"></ul>
+    <div class="app" id="app">
+        <div class="top">
+            <div class="staged-song-container">
+                <div class="staged-songs-area">
+                    <span class="staged-area-toggler r90">⏵︎</span>
+                    <span class="staged-songs-title">
+                        Staged songs
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="middle">
+            <div class="queue">
+                <div class="queue-header">
+                    <span class="queue-title">Queue</span>
+                    <span class="queue-infos" id="queue-infos">
+                        Empty queue !
+                    </span>
+                </div>
+                <div class="queue-content-container">
+                    <div class="queue-content" id="queue-content">
+                    </div>
+                    <div class="grad-h-1"></div>
+                    <div class="grad-h-2"></div>
+                </div>
+            </div>
+            <div class="vertical-bar"></div>
+            <div class="main">
+                <div class="main-container">
+                    <div class="search-area">
+                        <input type="text" id="searchbar" placeholder="Search" class="searchbar">
+                        <div class="search-controls-group">
+                            <div class="vertical-bar"></div>
+                            <div class="search-provider" provider="deezer" id="search-provider"></div>
+                        </div>
+                    </div>
+                    <div class="search-type">
+                        <div active>Tracks</div>
+                        <div class="disabled">Albums</div>
+                        <div class="disabled">Artists</div>
+                        <div class="disabled">Playlists</div>
+                    </div>
+                    <div class="main-content-container">
+                        <div class="song-item">
+                            <div></div>
+                            <div>TRACK</div>
+                            <div>ARTIST</div>
+                            <div>ALBUM</div>
+                        </div>
+                        <div class="main-content">
+                            <div class="song-item-container" id="song-item-container">
+                                
+                            </div>
+                            <div class="grad-h-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="player">
+                <div class="player-controls player-controls-left">
+                    <ul class="player-controls-group lowered">
+                        <li id="previous">⏪︎</li>
+                        <li id="pause-play">⏵︎</li>
+                        <li id="next">⏩︎</li>
+                    </ul>
+                </div>
+                <div class="vertical-bar vertical-bar-player"></div>
+                <div class="player-track">
+                    <div class="track-container">
+                        <div class="track-heading">
+                            <div class="track-title" id="track-title">
+                                go kiss your crush !
+                            </div>
+                            <span class="grad-v"></span>
+                        </div>
+                        <div class="track-seekbar">
+                            <span class="timeline-num" id="current-time">00:00</span>
+                            <input type="range" name="timeline" id="timeline" class="seekbar" min="0" max="500"
+                                value="0">
+                            <span class="timeline-num" id="duration">00:00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="vertical-bar vertical-bar-disappear"></div>
+                <div class="player-controls player-controls-right">
+                    <ul class="player-controls-group">
+                        <li class="player-icon">
+                            <img loading="lazy" id="track-image">
+                        </li>
+                        <li>
+                            🜲
+                        </li>
+                        <li>
+                            🃟
+                        </li>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="modal">
+            <div class="modal-song-container" id="modal-song-container">
+                <div class="modal-song" id="modal-song"></div>
+                <div class="modal-song-options">
+                    <div></div>
+                    <div class="song-actions" id="song-actions">
+                        <div class="option green">
+                            <div id="play">Play</div>
+                            <div>⏶︎</div>
+                            <div>⏷︎</div>
+                        </div>
+                        <div class="option orange">
+                            <div id="play-next">Play next</div>
+                            <div>⏶︎</div>
+                            <div>⏷︎</div>
+                        </div>
+                        <div class="option blue">
+                            <div id="append-to-queue">Append to queue</div>
+                            <div>⏶︎</div>
+                            <div>⏷︎</div>
+                        </div>
+                        <div class="option red">
+                            <div id="insert-randomly-in-queue">Insert randomly in queue</div>
+                            <div>⏶︎</div>
+                            <div>⏷︎</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio autoplay src="" id="player"></audio>
     <script src="client.js"></script>
     <script src="deezer-client.js"></script>
 </body>
+
 </html>

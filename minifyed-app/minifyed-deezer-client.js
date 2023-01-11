@@ -1,10 +1,8 @@
 'use strict';
 
 window.addEventListener('DOMContentLoaded', () => {
-    console.log(1);
     window.deezer.onready(async (_event, _value) => {
-        console.log(2);
-        main.register({
+        window.main.register({
             provider: 'deezer',
             suggest: async (query) => {
                 let a = await window.deezer.suggest(query);
@@ -24,14 +22,12 @@ window.addEventListener('DOMContentLoaded', () => {
                     for(let j = 0; j < track.ARTISTS.length; j++) {
                         artists.push(track.ARTISTS[j].ART_NAME);
                     }
-                    b.push(new main.Track({
+                    b.push(new window.main.Track({
                         provider: 'deezer',
                         title: track.SNG_TITLE,
                         artists: artists,
-                        thumbnail: 'https://e-cdns-images.dzcdn.net/images/cover/' + track.ALB_PICTURE + '/264x264-000000-80-0-0.jpg',
-                        album: track.ALB_TITLE,
+                        thumbnail: track.ALB_PICTURE,
                         trackBuffer: false,
-                        duration: track.DURATION,
                         data: {
                             'id': track.SNG_ID,
                             'token': track.TRACK_TOKEN
@@ -46,7 +42,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(track);
                 return await window.deezer.track(track.data.id, track.data.token);
             }
-        });
-        main.init();
+        })
+        window.main.init();
     })
 })

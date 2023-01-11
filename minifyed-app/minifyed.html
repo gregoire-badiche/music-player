@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="minifyed.css">
+    <title>Greatest Music Player</title>
+</head>
+
+<body>
+    <div class="bottom">
+        <span class="window-drag">⠿</span>
+        <div class="player">
+            <div class="player-controls player-controls-left">
+                <ul class="player-controls-group">
+                    <li>⏪︎</li>
+                    <li>⏸︎</li>
+                    <li>⏩︎</li>
+                </ul>
+            </div>
+            <div class="vertical-bar vertical-bar-visible"></div>
+            <div class="player-track">
+                <div class="track-container">
+                    <div class="track-heading">
+                        <div class="track-title">
+                            Smells Like Teen Spirit · Nirvana
+                        </div>
+                        <span class="track-title-grad">
+
+                        </span>
+                    </div>
+                    <div class="track-seekbar">
+                        <span class="timeline-num">00:00</span>
+                        <input type="range" name="timeline" id="timeline" class="seekbar" min="0" max="210" value="30">
+                        <span class="timeline-num">05:31</span>
+                    </div>
+                </div>
+            </div>
+            <div class="vertical-bar"></div>
+            <div class="player-controls player-controls-right">
+                <ul class="player-controls-group">
+                    <li class="player-icon" style="background: url(cover.jpg);">
+                        <img src="cover.jpg" loading="lazy">
+                    </li>
+                    <li>
+                        🜲
+                    </li>
+                    <li>
+                        🃟
+                    </li>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <audio autoplay src="" id="player"></audio>
+    <script src="minifyed-client.js"></script>
+    <script src="minifyed-deezer-client.js"></script>
+</body>
+
+</html>

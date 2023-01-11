@@ -18,3 +18,7 @@ contextBridge.exposeInMainWorld('deezer', {
         }
     }
 })
+
+contextBridge.exposeInMainWorld('back', {
+    resizeWindow: (h) => ipcRenderer.invoke('main:forceHeightResize', h)
+})
