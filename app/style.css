@@ -134,9 +134,14 @@ body {
     transition: .2s;
 }
 
-.player-controls-group>li:hover {
+.player-controls-group>li:hover:not([disabled]) {
     /* animation: shake .3s linear 0s 1 normal both; */
     transform: rotate(10deg);
+}
+
+.player-controls-group>li[disabled] {
+    color: #92929d;
+    cursor: default;
 }
 
 @keyframes shake {

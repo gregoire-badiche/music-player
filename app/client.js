@@ -1,15 +1,28 @@
 'use strict';
 
 class Queue {
+    #current = null;
+    queue = [];
+    HTMLElement = document.getElementById('queue-content');
+    HTMLInfos = document.getElementById('queue-infos');
+
     constructor() {
-        this.queue = [];
-        this.HTMLElement = document.getElementById('queue-content');
-        this.HTMLInfos = document.getElementById('queue-infos');
+        this.player = undefined;
+    }
+
+    get current() {
+        return this.#current
+    }
+
+    set current(v) {
+        this.#current = v;
+        this.updateCurrent();
     }
 
     empty() {
         this.queue = [];
         this.HTMLElement.innerHTML = '';
+        this.current = null;
     }
 
     update(arr) {
@@ -17,11 +30,36 @@ class Queue {
         arr.forEach(track => {
             this.addElement(track)
         });
+        if(this.current === null) {
+            this.current = 0;
+        }
+    }
+
+    updateCurrent() {
+        // Updates the background color for the song that is currently played
+        this.player.pausePlay.removeAttribute('disabled');
+        if (this.queue == null) {
+            this.player.nextButton.setAttribute('disabled', '');
+            this.player.previousButton.setAttribute('disabled', '');
+            this.player.pausePlay.setAttribute('disabled', '');
+        } else if (this.current == 0) {
+            this.player.nextButton.removeAttribute('disabled');
+            this.player.previousButton.setAttribute('disabled', '');
+        } else if (this.current == this.queue.length - 1) {
+            this.player.nextButton.removeAttribute('disabled');
+            this.player.previousButton.setAttribute('disabled', '');
+        } else {
+            this.player.nextButton.removeAttribute('disabled');
+            this.player.previousButton.removeAttribute('disabled');
+        }
     }
 
     addElement(track) {
         this.queue.push(track);
         this.createHTMLTrack(track);
+        if(this.current === null) {
+            this.current = 0;
+        }
     }
 
     createHTMLTrack(track) {
@@ -42,6 +80,22 @@ class Queue {
         el.appendChild(artists);
         el.appendChild(album);
         this.HTMLElement.appendChild(el);
+    }
+
+    next() {
+        if(this.current !== null && (this.current != this.queue.length - 1)) {
+            this.current += 1;
+            return this.queue[this.current];
+        }
+        return false;
+    }
+
+    previous() {
+        if(this.current !== null && (this.current != 0)) {
+            this.current -= 1;
+            return this.queue[this.current];
+        }
+        return false;
     }
 }
 
@@ -92,15 +146,18 @@ class SearchResults {
 }
 
 class Player {
-    constructor() {
+    constructor(queue) {
+        this.queue = queue;
         this.track = false;
         this.advencement = 0;
-        this.HTMLElement = document.getElementById('player');
+        this.audioElement = document.getElementById('player');
         this.durationElement = document.getElementById('duration');
         this.titleElement = document.getElementById('track-title');
         this.image = document.getElementById('track-image');
         this.pausePlay = document.getElementById('pause-play');
         this.timeline = document.getElementById('timeline');
+        this.previousButton = document.getElementById('previous');
+        this.nextButton = document.getElementById('next');
         this.duration = 0;
         this.state = 0;
         this.interval = undefined;
@@ -111,12 +168,22 @@ class Player {
                 this.resume();
             }
         }
-        // this.HTMLElement.onloadedmetadata = (_e) => {
-        //     this.duration = this.HTMLElement.duration;
+        // this.audioElement.onloadedmetadata = (_e) => {
+        //     this.duration = this.audioElement.duration;
         // }
+        this.audioElement.addEventListener('ended', (_e) => {
+            this.next();
+        });
+
+        this.previousButton.onclick = this.previous;
+        this.nextButton.onclick = this.next;
     }
 
     async play(track) {
+        if(track == null) {
+            this.pause();
+            return;
+        };
         this.track = track;
         let buff;
         if (track.isLoaded) {
@@ -125,7 +192,7 @@ class Player {
             buff = await main.providers[main.providerInUse.number].getTrack(track);
         }
         const url = URL.createObjectURL(new Blob([buff], { type: 'audio/mp3' }));
-        this.HTMLElement.setAttribute('src', url);
+        this.audioElement.setAttribute('src', url);
         let n1 = Math.floor(track.duration / 60) < 10 ? '0' + Math.floor(track.duration / 60) : '' + Math.floor(track.duration / 60);
         let n2 =  track.duration % 60 < 10 ? '0' + (track.duration % 60) : '' +  (track.duration % 60);
         this.durationElement.innerHTML = n1 + ':' + n2 ;
@@ -136,7 +203,7 @@ class Player {
     }
 
     pause() {
-        this.HTMLElement.pause();
+        this.audioElement.pause();
         this.pausePlay.innerHTML = '⏵︎';
         this.state = 0;
         clearInterval(this.interval)
@@ -144,42 +211,51 @@ class Player {
 
     resume() {
         if(this.track) {
-            this.HTMLElement.play();
+            this.audioElement.play();
             this.pausePlay.innerHTML = '⏸︎';
             this.state = 1;
         }
         this.interval = setInterval(() => {
-            this.timeline.value = (this.HTMLElement.currentTime * this.timeline.getAttribute('max') ) / this.duration;
+            this.timeline.value = (this.audioElement.currentTime * this.timeline.getAttribute('max') ) / this.duration;
             this.timeline.style.setProperty('--value', this.timeline.value);
             this.updateTime();
         }, 100)
     }
 
     updateTime() {
-        let n1 = Math.floor(this.HTMLElement.currentTime / 60) < 10 ? '0' + Math.floor(this.HTMLElement.currentTime / 60) : '' + Math.floor(this.HTMLElement.currentTime / 60);
-        let n2 =  this.HTMLElement.currentTime % 60 < 10 ? '0' + (Math.floor(this.HTMLElement.currentTime % 60)) : '' +  (Math.floor(this.HTMLElement.currentTime % 60));
+        let n1 = Math.floor(this.audioElement.currentTime / 60) < 10 ? '0' + Math.floor(this.audioElement.currentTime / 60) : '' + Math.floor(this.audioElement.currentTime / 60);
+        let n2 =  this.audioElement.currentTime % 60 < 10 ? '0' + (Math.floor(this.audioElement.currentTime % 60)) : '' +  (Math.floor(this.audioElement.currentTime % 60));
         document.getElementById('current-time').innerHTML = n1 + ':' + n2 ;
     }
 
     goto(value) {
-        this.HTMLElement.currentTime = (value * this.duration) / this.timeline.getAttribute('max');
+        this.audioElement.currentTime = (value * this.duration) / this.timeline.getAttribute('max');
+    }
+
+    next() {
+        this.play(this.queue.next());
+    }
+
+    previous() {
+        this.play(this.queue.previous())
     }
 }
 
-var main = {
-    suggestionContainer: undefined,
-    resultsContainer: undefined,
-    searchBar: undefined,
-    providers: [],
-    providerInUse: {
+class Main {
+    suggestionContainer = undefined;
+    resultsContainer = undefined;
+    searchBar = undefined;
+    providers = [];
+    providerInUse = {
         name: '',
         number: 0
-    },
-    suggestionState: 0,
-    searchResults: new SearchResults(),
-    queue: new Queue(),
-    player: new Player(),
+    };
+    suggestionState = 0;
+    searchResults = new SearchResults();
+    queue = new Queue();
+    player = new Player(this.queue);
     init() {
+        this.queue.player = this.player;
         this.suggestionContainer = document.getElementById('suggestions');
         this.resultsContainer = document.getElementById('song-item-container');
         this.searchBar = document.getElementById('searchbar');
@@ -200,7 +276,7 @@ var main = {
                 }, 250)
             }
         }
-    },
+    };
     async suggest(query) {
         // const list = await this.providers[this.providerInUse.number].suggest(query);
         // const ln = list.length < 5 ? list.length : 5;
@@ -211,16 +287,16 @@ var main = {
         //     el.onclick = () => { this.searchBar.value = el.innerText; }
         //     this.suggestionContainer.appendChild(el);
         // }
-    },
+    };
     async search(query) {
         const list = await this.providers[this.providerInUse.number].search(query);
         const res = list.length < 10 ? list : list.slice(0, 10);
         this.searchResults.display(res)
-    },
+    };
     register({ provider, suggest, search, getTrack }) {
         this.providers.push({ provider, suggest, search, getTrack })
-    },
-    Track: class {
+    };
+    Track = class {
         constructor({ provider, title, album, artists, thumbnail, trackBuffer, duration, data }) {
             this.provider = provider; // native, deezer, youtube, applemusic, spotify...
             this.title = title; // Where is my Mind?
@@ -232,9 +308,9 @@ var main = {
             this.data = data;
             this.isLoaded = this.trackBuffer ? true : false;
         }
-    },
+    };
 
-    listTrack: (track) => {
+    listTrack(track) {
         
     }
 }
@@ -259,6 +335,9 @@ document.addEventListener('DOMContentLoaded', (_e) => {
 });
 
 document.addEventListener('DOMContentLoaded', (_e) => {
+    window.main = new Main();
+
+
     let e = document.getElementById('search-provider');
     e.onclick = () => {
         console.log('popup modal !!');
@@ -321,7 +400,7 @@ document.addEventListener('DOMContentLoaded', (_e) => {
             l.scrollBy({ top: showedElPos, left: 0, behavior: "smooth" })
         }, 150);
     })
-})
+});
 
 const openModal = (source) => {
     source.classList.toggle('modalized');
